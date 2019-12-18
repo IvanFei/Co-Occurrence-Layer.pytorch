@@ -14,11 +14,11 @@ cd Co-Occurrence-Layer.pytorch
 
 ## Result
 <div align="center">
-<img src="docs/imgs/input%20matrix.png" width = "450" height = "350"/> 
-<img src="docs/imgs/input%20index.png" width = "450" height = "350"/>
+<img src="docs/imgs/input%20matrix.png" width = "400" height = "300"/> 
+<img src="docs/imgs/input%20index.png" width = "400" height = "300"/>
 
-<img src="docs/imgs/co%20occurrence%20matrix.png" width = "450" height = "350"/>
-<img src="docs/imgs/Co%20Occurrence%20output.png" width = "450" height = "350"/>
+<img src="docs/imgs/co%20occurrence%20matrix.png" width = "400" height = "300"/>
+<img src="docs/imgs/Co%20Occurrence%20output.png" width = "400" height = "300"/>
 </div>
 
 
