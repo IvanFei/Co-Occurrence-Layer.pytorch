@@ -24,8 +24,8 @@ class CoOccurrenceLayer(nn.Module):
 
     def reset_parameters(self) -> None:
         init.kaiming_uniform_(self.co_matrix, a=math.sqrt(5))
-        # init.kaiming_uniform_(self.spatial_filter, a=math.sqrt(5))
-        init.constant_(self.spatial_filter, val=1)
+        init.kaiming_uniform_(self.spatial_filter, a=math.sqrt(5))
+        # init.constant_(self.spatial_filter, val=1)
 
     def forward(self, input: torch.Tensor) -> Tensor_List:
         num_quantization = self.co_matrix_shape[0]
@@ -72,7 +72,7 @@ class CoOccurrenceLayer(nn.Module):
         # normalize the input to 0~1
         input_norm = (input - input_min) / input_max
         # input to index
-        input_idx = input_norm * (num_quantization - 1)
+        input_idx = input_norm * num_quantization
         # floor to int
         input_idx = torch.floor(input_idx).int()
         print(f"[*] input idx type: {type(input_idx)}")
