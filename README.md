@@ -2,7 +2,9 @@
 #### This repo is pytorch implement for "Co-Occurrence Neural Network"
 
 ## Co-Occurrence Convolution
-<img src="docs/imgs/Co-Occurrence%20Convolution.png" width = "300" height = "300" align = center />
+<div align="center">
+<img src="docs/imgs/Co-Occurrence%20Convolution.png" width = "400" height = "300"/>
+</div>
 
 ## Usage
 ```bash
