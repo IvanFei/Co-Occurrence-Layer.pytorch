@@ -53,7 +53,8 @@ class CoOccurrenceLayer(nn.Module):
 
         return conv_out
 
-    def _quantization_input_as_bins(self, input: torch.Tensor, num_quantization: int) -> torch.Tensor:
+    @staticmethod
+    def _quantization_input_as_bins(input: torch.Tensor, num_quantization: int) -> torch.Tensor:
         input_min = torch.min(input).expand_as(input)
         input_max = torch.max(input).expand_as(input)
         # normalize the input to 0~1
