@@ -1,6 +1,8 @@
 ## Note 
 #### This repo is pytorch implement for "Co-Occurrence Neural Network"
 
+tensorflow code repo: https://github.com/Shevlev/Co-occurrence-Neural-Network
+
 ## Co-Occurrence Convolution
 <div align="center">
 <img src="docs/imgs/Co-Occurrence%20Convolution.png" width = "500" height = "400"/>
