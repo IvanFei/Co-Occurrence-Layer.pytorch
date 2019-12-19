@@ -69,8 +69,8 @@ class ConvolutionNet(nn.Module):
         input = input.reshape([input.shape[0], input.shape[1], ToyData.IMAGE_SIZE, ToyData.IMAGE_SIZE])
         conv_out = self.conv_layer(input)
         avg_pool = self.global_avgpooling(conv_out)
-        out = self.classifier(avg_pool)
-        out = torch.flatten(out, 1)
+        out = torch.flatten(avg_pool, 1)
+        out = self.classifier(out)
         out = torch.softmax(out, dim=1)
 
         return out

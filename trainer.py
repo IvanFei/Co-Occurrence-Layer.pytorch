@@ -31,7 +31,7 @@ def get_optimizer(name: str) -> torch.optim.Optimizer:
 
 def calc_accurecy(pred: torch.Tensor, label: torch.Tensor) -> torch.Tensor:
     pred = torch.argmax(pred, dim=1)
-    accurecy = torch.mean(pred == label)
+    accurecy = torch.sum(pred == label).float() / pred.shape[0]
     return accurecy
 
 
@@ -93,6 +93,7 @@ class Trainer(object):
 
         for step, data_batch in enumerate(self.train_data):
             image, label = data_batch[0], data_batch[1]
+            image, label = image.float(), label.long()
             if self.args.cuda:
                 image, label = image.cuda(), label.cuda()
 
@@ -129,6 +130,7 @@ class Trainer(object):
 
         for idx, data_batch in enumerate(data):
             image, label = data_batch[0], data_batch[1]
+            image, label = image.float(), label.long()
             if self.args.cuda:
                 image, label = image.cuda(), label.cuda()
 

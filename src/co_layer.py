@@ -14,6 +14,7 @@ class CoOccurrenceLayer(nn.Module):
         self.stride = stride
         self.co_matrix = Parameter(torch.Tensor(*self.co_matrix_shape))
         self.spatial_filter = Parameter(torch.Tensor(*self.spatial_shape))
+        self.filters_ones = torch.ones([1, 1, 1, 1, 1], requires_grad=False).float().cuda()
         self.reset_parameters()
 
     def reset_parameters(self) -> None:
@@ -43,8 +44,9 @@ class CoOccurrenceLayer(nn.Module):
             w_3d = self.spatial_filter.reshape([1, 1, *self.spatial_shape])
             input_mask = (input_idx == i).unsqueeze(dim=1).float()
 
-            filters_ones = torch.ones([1, 1, 1, 1, 1])
-            input_mask = torch.conv3d(input_mask, filters_ones, stride=[self.stride, self.stride, self.stride])
+            # if input_mask.is_cuda:
+            #     filters_ones.cuda()
+            input_mask = torch.conv3d(input_mask, self.filters_ones, stride=[self.stride, self.stride, self.stride])
             padding = int((self.spatial_shape[0] - 1) / 2)
             spatial_conv_input = torch.conv3d(input_multiply_cof, w_3d,
                                               stride=[self.stride, self.stride, self.stride], padding=padding)
