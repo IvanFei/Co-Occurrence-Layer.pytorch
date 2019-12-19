@@ -54,6 +54,8 @@ class CoOccurrenceLayer(nn.Module):
             input_mask = (input_idx == i).unsqueeze(dim=1).float()
 
             filters_ones = torch.ones([1, 1, 1, 1, 1])
+            if input_mask.is_cuda:
+                filters_ones = filters_ones.cuda()
             input_mask = torch.conv3d(input_mask, filters_ones, stride=[self.stride, self.stride, self.stride])
             padding = int((self.spatial_shape[0] - 1) / 2)
             spatial_conv_input = torch.conv3d(input_multiply_cof, w_3d,
@@ -71,9 +73,9 @@ class CoOccurrenceLayer(nn.Module):
         # normalize the input to 0~1
         input_norm = (input - input_min) / input_max
         # input to index
-        input_idx = input_norm * num_quantization
+        input_idx = input_norm * (num_quantization - 1)
         # floor to int
-        input_idx = torch.floor(input_idx).int()
+        input_idx = torch.round(input_idx).int()
         print(f"[*] input idx type: {type(input_idx)}")
 
         return input_idx

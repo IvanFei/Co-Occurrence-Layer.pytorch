@@ -11,7 +11,7 @@ num_classification = 2
 class CoOccurrenceNet(nn.Module):
 
     co_matrix_shape = [4, 4]
-    w_shape = [10, 10, 1]
+    w_shape = [1, 10, 10]
     conn_pool_size = (6, 6)
 
     def __init__(self) -> None:
@@ -28,7 +28,7 @@ class CoOccurrenceNet(nn.Module):
         pooling = self.global_avgpooling(conn_out)
         out = torch.flatten(pooling, 1)
         out = self.classifier(out)
-        out = torch.softmax(out)
+        out = torch.softmax(out, dim=1)
 
         return out
 

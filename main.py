@@ -7,6 +7,7 @@ from utils.utils import prepare_dirs, save_args
 
 
 def main(args):
+
     prepare_dirs(args)
     torch.random.manual_seed(args.random_seed)
     if args.cuda:
