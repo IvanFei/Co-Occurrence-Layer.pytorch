@@ -37,6 +37,7 @@ class CoOccurrenceLayer(nn.Module):
                                       num_quantizaiton: int) -> torch.Tensor:
         # for loop to calculate the conv
         N, c, h, w = input.shape
+        print(f"[*] N: {N}, c: {c}, h: {h}, w: {w}")
         input_idx_vec = input_idx.flatten()
         print(f"[*] input idx vec shape: {input_idx_vec.shape}")
         conv_out = torch.zeros_like(input)
@@ -57,7 +58,10 @@ class CoOccurrenceLayer(nn.Module):
             if input_mask.is_cuda:
                 filters_ones = filters_ones.cuda()
             input_mask = torch.conv3d(input_mask, filters_ones, stride=[self.stride, self.stride, self.stride])
-            padding = int((self.spatial_shape[0] - 1) / 2)
+            print(f"[*] spatial shape: {self.spatial_shape}")
+            print(f"[*] len spatial shape: {len(self.spatial_shape)}")
+            padding = [int((self.spatial_shape[i] - 1) / 2) for i in range(len(self.spatial_shape))]
+            print(f"[*] padding: {padding}")
             spatial_conv_input = torch.conv3d(input_multiply_cof, w_3d,
                                               stride=[self.stride, self.stride, self.stride], padding=padding)
 
@@ -82,16 +86,16 @@ class CoOccurrenceLayer(nn.Module):
 
 
 if __name__ == "__main__":
-    co_layer = CoOccurrenceLayer(co_matrix_shape=[5, 5], spatial_shape=[3, 3, 3])
-    feat_map = np.random.rand(1, 10, 10, 1)
+    co_layer = CoOccurrenceLayer(co_matrix_shape=[5, 5], spatial_shape=[1, 3, 3])
+    feat_map = np.random.rand(1, 1, 20, 10)
     print(f"[*] feature map shape: {feat_map.shape}")
     feat_map = torch.Tensor(feat_map)
     out, co_matrix, spatial_filter, input_idx = co_layer(feat_map)
 
-    vis_matrix(feat_map, [10, 10], "input matrix")
+    vis_matrix(feat_map, [20, 10], "input matrix")
 
     vis_matrix(co_matrix, [5, 5], "co occurrence matrix")
 
-    vis_matrix(input_idx, [10, 10], "input index")
+    vis_matrix(input_idx, [20, 10], "input index")
 
-    vis_matrix(out, [10, 10], "Co Occurrence output")
+    vis_matrix(out, [20, 10], "Co Occurrence output")

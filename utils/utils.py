@@ -10,6 +10,7 @@ from argparse import Namespace
 
 logger = logging.getLogger(__name__)
 
+
 def vis_matrix(matrix: torch.Tensor, input_shape: list, title: str, save_or_not: bool = False) -> None:
     matrix = matrix.reshape(input_shape).data.numpy()
     print(f"[*] matrix shape: {matrix.shape}")
