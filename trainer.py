@@ -172,7 +172,8 @@ class Trainer(object):
                 remove_epoch = remove_key.split("_")[0]
                 remove_step = remove_key.split("_")[1]
                 path = glob.glob(os.path.join(self.args.model_dir, f"*_epoch{remove_epoch}_step{remove_step}.pth"))
-                remove_file(path)
+                for p in path:
+                    remove_file(p)
 
             torch.save(checkpoint_tracker, self.checkpoint_path)
         else:

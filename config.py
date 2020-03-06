@@ -13,7 +13,7 @@ data.add_argument("--num_threads", type=int, default=4)
 learn = parser.add_argument_group("Learning")
 learn.add_argument("--mode", type=str, default="train", choices=["train", "test"])
 learn.add_argument("--batch_size", type=int, default=32)
-learn.add_argument("--max_epoch", type=int, default=50)
+learn.add_argument("--max_epoch", type=int, default=200)
 learn.add_argument("--optim", type=str, default="sgd")
 learn.add_argument("--lr", type=float, default=0.001)
 

@@ -2,6 +2,7 @@ import torch
 import math
 import numpy as np
 from torch import nn
+import torch.nn.functional as F
 from torch.nn.parameter import Parameter
 from torch.nn import init
 
@@ -60,10 +61,9 @@ class CoOccurrenceLayer(nn.Module):
             input_mask = torch.conv3d(input_mask, filters_ones, stride=[self.stride, self.stride, self.stride])
             print(f"[*] spatial shape: {self.spatial_shape}")
             print(f"[*] len spatial shape: {len(self.spatial_shape)}")
-            padding = [int((self.spatial_shape[i] - 1) / 2) for i in range(len(self.spatial_shape))]
-            print(f"[*] padding: {padding}")
+            input_multiply_cof = self.fix_padding(input_multiply_cof, self.spatial_shape)
             spatial_conv_input = torch.conv3d(input_multiply_cof, w_3d,
-                                              stride=[self.stride, self.stride, self.stride], padding=padding)
+                                              stride=[self.stride, self.stride, self.stride])
 
             print(f"[*] input_mask 0 shape: {input_mask[:, 0, :, :, :].shape}")
             print(f"[*] spatial_conv_input 0 shape: {spatial_conv_input[:, 0, :, :, :].shape}")
@@ -71,22 +71,36 @@ class CoOccurrenceLayer(nn.Module):
 
         return conv_out
 
+    def fix_padding(self, input: torch.Tensor, spatial_shape: list) -> torch.Tensor:
+        pad_list = []
+        for fs in spatial_shape[::-1]:
+            pad_total = fs - 1
+            pad_beg = pad_total // 2
+            pad_end = pad_total - pad_beg
+            pad_list.extend([pad_beg, pad_end])
+        input_padding = F.pad(input, pad_list)
+        return input_padding
+
     def _quantization_input_as_bins(self, input: torch.Tensor, num_quantization: int) -> torch.Tensor:
         input_min = torch.min(input).expand_as(input)
         input_max = torch.max(input).expand_as(input)
         # normalize the input to 0~1
         input_norm = (input - input_min) / input_max
-        # input to index
-        input_idx = input_norm * (num_quantization - 1)
-        # floor to int
-        input_idx = torch.round(input_idx).int()
+        # # input to index
+        # input_idx = input_norm * (num_quantization - 1)
+        # # floor to int
+        # input_idx = torch.round(input_idx).int()
+        eps = torch.FloatTensor([1e-5])
+        input_idx = input_norm * num_quantization
+        input_idx = torch.abs(input_idx - eps)
+        input_idx = torch.floor(input_idx)
         print(f"[*] input idx type: {type(input_idx)}")
 
         return input_idx
 
 
 if __name__ == "__main__":
-    co_layer = CoOccurrenceLayer(co_matrix_shape=[5, 5], spatial_shape=[1, 3, 3])
+    co_layer = CoOccurrenceLayer(co_matrix_shape=[5, 5], spatial_shape=[1, 10, 10])
     feat_map = np.random.rand(1, 1, 20, 10)
     print(f"[*] feature map shape: {feat_map.shape}")
     feat_map = torch.Tensor(feat_map)

@@ -1,6 +1,7 @@
 import os
 import torch
 import config
+import time
 from dataset import get_loader
 from trainer import Trainer
 from utils.utils import prepare_dirs, save_args
@@ -34,6 +35,8 @@ def main(args):
 if __name__ == "__main__":
     args, unparsed = config.get_args()
     os.environ["CUDA_VISIBLE_DEVICES"] = str(args.gpu_id)
-
+    time_beg = time.time()
     main(args)
+    time_end = time.time()
+    print(f"[*] TIME cost: {time_end - time_beg}")
 
