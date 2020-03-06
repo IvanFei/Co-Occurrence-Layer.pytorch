@@ -49,7 +49,7 @@ python main.py --model_name FC --model_type FC --mode train --lr 0.00005 --optim
 ## Comparison with Conv and FC
 #### Toy dataset
 <div align="center">
-<img src="docs/imgs/toy_dataset.png" width = "400" height = "300"/>
+<img src="docs/imgs/toy_dataset.png" width = "600" height = "300"/>
 </div>
 
 #### Model arch
