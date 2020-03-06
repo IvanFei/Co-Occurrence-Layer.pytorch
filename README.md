@@ -65,7 +65,7 @@ python main.py --model_name FC --model_type FC --mode train --lr 0.00005 --optim
 
 #### Result
 <div align="center">
-<img src="docs/imgs/paper_result.png" width = "400" height = "300"/>
+<img src="docs/imgs/paper_result.png" width = "300" height = "300"/>
 </div>
 
 <div align="center">
